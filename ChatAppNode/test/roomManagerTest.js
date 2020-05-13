@@ -5,33 +5,6 @@ var assert = require('assert');
 
 describe('Array', function () {
 
-    describe('#addUser(user, roomName)', function () {
-        it('checking rooms count', function () {
-            var roomManager = new RoomManager();
-            roomManager.rooms.push(new Room("gürkanodasi"));
-
-            assert.equal(roomManager.getRoomsCount(), 1);
-        });
-    });
-
-    describe('#removeUser(user, roomName)', function () {
-        it('checking rooms count', function () {
-            var roomManager = new RoomManager();
-            roomManager.rooms.push(new Room("gürkanodasi"));
-
-            assert.equal(roomManager.getRoomsCount(), 1);
-        });
-    });
-
-    describe('#removeRoom(roomName)', function () {
-        it('checking rooms count', function () {
-            var roomManager = new RoomManager();
-            roomManager.rooms.push(new Room("gürkanodasi"));
-
-            assert.equal(roomManager.getRoomsCount(), 1);
-        });
-    });
-
     describe('#getRoomsCount()', function () {
         it('checking rooms count', function () {
             var roomManager = new RoomManager();

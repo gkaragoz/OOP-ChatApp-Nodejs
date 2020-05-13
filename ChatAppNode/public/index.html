@@ -33,6 +33,11 @@
             console.log("Trying to join to room called: " + roomName);
             socket.emit(SEND_JOIN_TO_ROOM, roomName);
         }
+        
+        function leaveRoom(roomName) {
+            console.log("Trying to leave from room called: " + roomName);
+            socket.emit(SEND_LEAVE_FROM_ROOM, roomName);
+        }
 
     </script>
 </body>

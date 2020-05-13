@@ -59,4 +59,12 @@ describe('Array', function () {
         });
     });
     
+    describe('#isUserIn(id)', function () {
+        it('is room empty or not', function () {
+            let room = new Room("gürkanodasi");
+
+            assert.equal(room.isUserIn(user.id), false);
+        });
+    });
+
 });

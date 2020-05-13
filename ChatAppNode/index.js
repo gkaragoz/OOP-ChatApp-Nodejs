@@ -37,7 +37,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on(Keys.SEND_USERNAME, (name) => {
-    logger.print('A user name has been changed to ' + name);
+    logger.print(socket.id + ' named user has been changed its name to ' + name);
     user = GetUserById(socket.id);
     user.name = name;
     
@@ -45,10 +45,21 @@ io.on('connection', (socket) => {
   });
 
   socket.on(Keys.SEND_JOIN_TO_ROOM, (roomName) => {
-    logger.print("A user wants to join room called: " + roomName);
     user = GetUserById(socket.id);
+    logger.print(user.name + " named user wants to join room called " + roomName);
 
     roomManager.addUser(socket, user, roomName);
+
+    // BroadcastToEveryoneIncludeMe(Keys.SEND_JOIN_TO_ROOM_SUCCESS);
+  });
+
+  socket.on(Keys.SEND_LEAVE_FROM_ROOM, (roomName) => {
+    user = GetUserById(socket.id);
+    logger.print(user.name + " named user wants to leave from room called " + roomName);
+
+    roomManager.removeUser(socket, user, roomName);
+
+    // BroadcastToEveryoneIncludeMe(Keys.SEND_LEAVE_FROM_ROOM_SUCCESS);
   });
 
 });
@@ -82,6 +93,10 @@ function GetPrettyUserPrint(user) {
 
 function BroadcastToEveryoneExceptMe(socket, EVENT_CODE, data) {
   socket.broadcast.emit(EVENT_CODE, data);
+}
+
+function BroadcastToEveryoneIncludeMe(io, EVENT_CODE, data) {
+  io.emit(EVENT_CODE, data);
 }
 
 function TellServerStatus() {
