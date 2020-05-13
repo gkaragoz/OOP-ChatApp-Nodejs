@@ -7,8 +7,12 @@ const { v4: uuidv4 } = require('uuid');
 
 const strings = require('./strings')
 const Keys = new strings.Keys();
+const Log = require('./Log');
+const RoomManager = require('./roomManager');
 
-var Users = [];
+let Users = [];
+let roomManager = new RoomManager();
+let logger = new Log("SERVER");
 
 app.use(express.static('public'));
 
@@ -17,7 +21,7 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', (socket) => {
-  var user = AddUser(socket.id);
+  var user = AddUser(socket.id, socket.rooms);
   TellServerStatus();
 
   BroadcastToEveryoneExceptMe(socket, Keys.ON_USER_CONNECTED, user);
@@ -25,7 +29,7 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     user = RemoveUser(socket.id);
 
-    Log('A user has been disconnected from server: ' + user.name);
+    logger.print('A user has been disconnected from server: ' + user.name);
     
     TellServerStatus();
 
@@ -33,7 +37,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on(Keys.SEND_USERNAME, (name) => {
-    Log('A user name has been changed to ' + name);
+    logger.print('A user name has been changed to ' + name);
     user = GetUserById(socket.id);
     user.name = name;
     
@@ -41,22 +45,19 @@ io.on('connection', (socket) => {
   });
 
   socket.on(Keys.SEND_JOIN_TO_ROOM, (roomName) => {
-    Log("A user wants to join room called: " + roomName);
+    logger.print("A user wants to join room called: " + roomName);
     user = GetUserById(socket.id);
 
-    socket.join(roomName, () => {
-      let rooms = Object.keys(socket.rooms);
-      console.log(rooms);
-    });
+    roomManager.addUser(socket, user, roomName);
   });
 
 });
 
-function AddUser(id) {
-  var user = new User(id, uuidv4());
+function AddUser(id, rooms) {
+  var user = new User(id, uuidv4(), rooms);
   Users.push(user);
 
-  Log('New connection received!');
+  logger.print('New connection received!');
 
   return user;
 }
@@ -84,17 +85,13 @@ function BroadcastToEveryoneExceptMe(socket, EVENT_CODE, data) {
 }
 
 function TellServerStatus() {
-  Log("Online users count: " + Users.length);
+  logger.print("Online users count: " + Users.length);
 }
 
-function Log(log) {
-  let date = new Date();
-  let hours = date.getHours();
-  let minutes = date.getMinutes();
-  let seconds = date.getSeconds();
-
-  let timelog = hours + ':' + minutes + ':' + seconds;
-  console.log('[' + timelog + '] ' + log);
+function TellUsersDetails() {
+  Users.forEach(user => {
+    logger.print("User: " + GetPrettyUserPrint(user));
+  });
 }
 
 http.listen(3000, () => {

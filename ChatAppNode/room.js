@@ -1,16 +1,16 @@
+const Log = require('./Log');
+
 function Room(name) {
     this.name = name;
     this.users = [];
 
-    function addUser(user) {
+    this.addUser = function(user) {
         this.users.push(user);
-      
-        Log(user.name + ' joined to room ' + this.name);
       
         return user;
     }
     
-    function removeUser(user) {
+    this.removeUser = function(user) {
         index = this.users.indexOf(user);
       
         this.users.splice(index, 1);
@@ -18,11 +18,11 @@ function Room(name) {
         return user;
     }
 
-    function getUserById(id) {
+    this.getUserById = function(id) {
         return this.users.find(user => user.id === id);
     }
 
-    function getIsEmpty() {
+    this.getIsEmpty = function() {
         return this.users.length !== 0 ? false : true;
     }
   

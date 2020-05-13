@@ -16,6 +16,8 @@
   "dependencies": {
     "config": "^3.3.1",
     "express": "^4.17.1",
+    "mocha": "^7.1.2",
+    "moment": "^2.25.3",
     "mongoose": "^5.9.13",
     "socket.io": "^2.3.0",
     "uuid": "^8.0.0"
