@@ -1,0 +1,39 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SocketIO</title>
+</head>
+<body>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="./strings.js"></script>
+    <script>
+        var socket = io();
+
+        sendName("Ziyaretçi" + Math.floor(Math.random(Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER) * 100) + 1);
+        
+        socket.on(ON_USER_CONNECTED, function(user) {
+            console.log("ON_USER_CONNECTED " + JSON.stringify(user));
+        });
+
+        socket.on(ON_USER_DISCONNECTED, function(user) {
+            console.log("ON_USER_DISCONNECTED " + JSON.stringify(user));
+        });
+
+        socket.on(ON_USERNAME_CHANGED, function(user) {
+            console.log("ON_USERNAME_CHANGED " + JSON.stringify(user));
+        });
+        
+        function sendName(name) {
+            console.log("Trying to set my name as: " + name);
+            socket.emit(SEND_USERNAME, name);
+        }
+
+        function joinRoom(roomName) {
+            console.log("Trying to join to room called: " + roomName);
+            socket.emit(SEND_JOIN_TO_ROOM, roomName);
+        }
+
+    </script>
+</body>
+</html>
