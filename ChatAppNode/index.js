@@ -48,18 +48,27 @@ io.on('connection', (socket) => {
     user = GetUserById(socket.id);
     logger.print(user.name + " named user wants to join room called " + roomName);
 
-    roomManager.addUser(socket, user, roomName);
-
-    // BroadcastToEveryoneIncludeMe(Keys.SEND_JOIN_TO_ROOM_SUCCESS);
+    roomManager.addUser(socket, user, roomName, (isSuccess) => {
+      if (isSuccess) {
+        BroadcastToEveryoneIncludeMe(io, Keys.ON_JOIN_TO_ROOM_SUCCESS);
+      } else {
+        BroadcastToEveryoneIncludeMe(io, Keys.ON_JOIN_TO_ROOM_FAILED);
+      }
+    });
   });
 
   socket.on(Keys.SEND_LEAVE_FROM_ROOM, (roomName) => {
     user = GetUserById(socket.id);
     logger.print(user.name + " named user wants to leave from room called " + roomName);
 
-    roomManager.removeUser(socket, user, roomName);
+    roomManager.removeUser(socket, user, roomName, (isSuccess) => {
+      if (isSuccess) {
+        BroadcastToEveryoneIncludeMe(io, Keys.ON_LEAVE_FROM_ROOM_SUCCESS);
+      } else {
+        BroadcastToEveryoneIncludeMe(io, Keys.ON_LEAVE_FROM_ROOM_FAILED);
+      }
+    });
 
-    // BroadcastToEveryoneIncludeMe(Keys.SEND_LEAVE_FROM_ROOM_SUCCESS);
   });
 
 });

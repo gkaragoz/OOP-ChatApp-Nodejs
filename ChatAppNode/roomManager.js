@@ -6,7 +6,7 @@ let logger = new Log("RoomManager");
 function RoomManager() {
     this.rooms = [];
 
-    this.addUser = function(socket, user, roomName) {
+    this.addUser = function(socket, user, roomName, callback) {
         let targetRoom;
         if (this.isRoomExists(roomName) === false) {
             logger.print(roomName + " named room not found");
@@ -23,19 +23,20 @@ function RoomManager() {
         if (targetRoom.addUser(user)) {
             socket.join(roomName, () => {
                 logger.print(user.name + " has been joined to room " + roomName);
-                return;
+                callback(true);
             });
         } else {
             logger.print(user.name + " could not joined to room " + roomName);
-            return;
+            callback(false);
         }
 
         this.tellRoomInfo(roomName);
     }
 
-    this.removeUser = function(socket, user, roomName) {
+    this.removeUser = function(socket, user, roomName, callback) {
         if (this.isRoomExists(roomName) === false) {
             logger.print(roomName + " room not found!");
+            callback(false);
             return;
         }
         
@@ -44,8 +45,10 @@ function RoomManager() {
             socket.leave(roomName, () => {
                 logger.print(user.name + " successfully left from room " + roomName);
             });
+            callback(true);
         } else {
             logger.print(user.name + " not in the room!");
+            callback(false);
         }
 
         this.tellRoomInfo(roomName);

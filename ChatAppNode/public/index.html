@@ -24,6 +24,22 @@
             console.log("ON_USERNAME_CHANGED " + JSON.stringify(user));
         });
         
+        socket.on(ON_JOIN_TO_ROOM_SUCCESS, function() {
+            console.log("ON_JOIN_TO_ROOM_SUCCESS");
+        });
+        
+        socket.on(ON_JOIN_TO_ROOM_FAILED, function() {
+            console.log("ON_JOIN_TO_ROOM_FAILED");
+        });
+        
+        socket.on(ON_LEAVE_FROM_ROOM_SUCCESS, function() {
+            console.log("ON_LEAVE_FROM_ROOM_SUCCESS");
+        });
+        
+        socket.on(ON_LEAVE_FROM_ROOM_FAILED, function() {
+            console.log("ON_LEAVE_FROM_ROOM_FAILED");
+        });
+        
         function sendName(name) {
             console.log("Trying to set my name as: " + name);
             socket.emit(SEND_USERNAME, name);
