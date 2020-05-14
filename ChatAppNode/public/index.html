@@ -39,6 +39,10 @@
         socket.on(ON_LEAVE_FROM_ROOM_FAILED, function() {
             console.log("ON_LEAVE_FROM_ROOM_FAILED");
         });
+
+        socket.on(ON_GET_MESSAGE_FROM_GLOBAL, function(data) {
+            console.log("ON_GET_MESSAGE_FROM_GLOBAL " + JSON.stringify(data));
+        });
         
         function sendName(name) {
             console.log("Trying to set my name as: " + name);
@@ -53,6 +57,11 @@
         function leaveRoom(roomName) {
             console.log("Trying to leave from room called: " + roomName);
             socket.emit(SEND_LEAVE_FROM_ROOM, roomName);
+        }
+
+        function sendGlobalMessage(data) {
+            console.log;("Trying to send global message: " + data);
+            socket.emit(SEND_MESSAGE_TO_GLOBAL, data);
         }
 
     </script>

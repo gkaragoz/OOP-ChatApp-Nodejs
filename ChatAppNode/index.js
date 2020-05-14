@@ -69,6 +69,17 @@ function onConnect(socket) {
       }
     });
   });
+
+  socket.on(Keys.SEND_MESSAGE_TO_GLOBAL, (data) => {
+    user = userManager.getUserById(socket.id);
+
+    let response = {
+      "sender": user,
+      "data": data
+    };
+
+    BroadcastToEveryoneIncludeMe(io, Keys.ON_GET_MESSAGE_FROM_GLOBAL, response);
+  });
 }
 
 function BroadcastToEveryoneExceptMe(socket, EVENT_CODE, data) {
