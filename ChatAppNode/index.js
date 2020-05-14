@@ -19,10 +19,12 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 
-io.on('connection', (socket) => {
-  var user = userManager.addUser(socket.id, socket.rooms);
+io.on('connection', onConnect);
 
-  logger.print(user.name + ' named connected to server.');
+function onConnect(socket) {
+  var user = userManager.addUser(socket.id, undefined, socket.rooms);
+
+  logger.print(JSON.stringify(user.name) + ' named connected to server.');
 
   BroadcastToEveryoneExceptMe(socket, Keys.ON_USER_CONNECTED, user);
 
@@ -67,7 +69,7 @@ io.on('connection', (socket) => {
       }
     });
   });
-});
+}
 
 function BroadcastToEveryoneExceptMe(socket, EVENT_CODE, data) {
   socket.broadcast.emit(EVENT_CODE, data);

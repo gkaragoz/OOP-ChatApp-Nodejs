@@ -15,6 +15,7 @@ function UserManager() {
 
         let user;
         let newName = name;
+
         if (name === undefined) {
             newName = uuidv4();
         }
