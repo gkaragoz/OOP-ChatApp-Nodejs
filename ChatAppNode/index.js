@@ -79,6 +79,10 @@ function BroadcastToEveryoneIncludeMe(io, EVENT_CODE, data) {
   io.emit(EVENT_CODE, data);
 }
 
+function SendPrivateMessageTo(io, socket, EVENT_CODE, data) {
+  io.to(socket.id).emit(EVENT_CODE, data);
+}
+
 http.listen(3000, () => {
   console.log('listening on *:3000');
 });
