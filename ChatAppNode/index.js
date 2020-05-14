@@ -70,6 +70,29 @@ function onConnect(socket) {
     });
   });
 
+  socket.on(Keys.SEND_MESSAGE_TO_ROOM, (targetRoomName, data) => {
+    user = userManager.getUserById(socket.id);
+    room = roomManager.getRoomByName(targetRoomName);
+
+    let response = {
+      "sender": user,
+      "data": data
+    };
+
+    SendMessageToGroup(socket, targetRoomName, Keys.ON_GET_MESSAGE_FROM_ROOM, response);
+  });
+
+  socket.on(Keys.SEND_MESSAGE_TO_PRIVATE, (socketId, data) => {
+    user = userManager.getUserById(socketId);
+    
+    let response = {
+      "sender": user,
+      "data": data
+    };
+
+    SendMessageToPrivate(io, socket, Keys.ON_GET_MESSAGE_FROM_PRIVATE, response);
+  });
+
   socket.on(Keys.SEND_MESSAGE_TO_GLOBAL, (data) => {
     user = userManager.getUserById(socket.id);
 
@@ -90,7 +113,11 @@ function BroadcastToEveryoneIncludeMe(io, EVENT_CODE, data) {
   io.emit(EVENT_CODE, data);
 }
 
-function SendPrivateMessageTo(io, socket, EVENT_CODE, data) {
+function SendMessageToGroup(socket, groupName, EVENT_CODE, data) {
+  socket.to(groupName).emit(EVENT_CODE, data);
+}
+
+function SendMessageToPrivate(io, socket, EVENT_CODE, data) {
   io.to(socket.id).emit(EVENT_CODE, data);
 }
 

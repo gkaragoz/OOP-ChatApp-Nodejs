@@ -60,8 +60,13 @@
         }
 
         function sendGlobalMessage(data) {
-            console.log;("Trying to send global message: " + data);
+            console.log("Trying to send global message: " + data);
             socket.emit(SEND_MESSAGE_TO_GLOBAL, data);
+        }
+
+        function sendRoomMessage(roomName, data) {
+            console.log("Trying to send room message to " + roomName + "\ndata:" + data);
+            socket.emit(SEND_MESSAGE_TO_ROOM, roomName, data);
         }
 
     </script>
