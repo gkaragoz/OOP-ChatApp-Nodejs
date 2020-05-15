@@ -1,6 +1,5 @@
 const User = require('./user');
 const Log = require('./Log')
-const { v4: uuidv4 } = require('uuid');
 
 let logger = new Log("UserManager");
 
@@ -17,7 +16,7 @@ function UserManager() {
         let newName = name;
 
         if (name === undefined) {
-            newName = uuidv4();
+            newName = "guest(" + Math.floor(Math.random() * 25) + ")";
         }
         
         user = new User(id, newName, rooms);

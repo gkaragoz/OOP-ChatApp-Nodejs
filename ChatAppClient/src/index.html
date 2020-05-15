@@ -44,7 +44,7 @@
             <div class="messaging">
                 <div class="inbox_msg">
                     <div class="inbox_people">
-                        <div class="inbox_chat">
+                        <div id="globalChatUsers" class="inbox_chat">
                             <div class="chat_list active_chat">
                                 <div class="chat_people">
                                     <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png"
@@ -101,7 +101,7 @@
             <div class="messaging">
                 <div class="inbox_msg">
                     <div class="inbox_people">
-                        <div class="inbox_chat">
+                        <div class="inbox_chat" id="groupsChatRooms">
                             <div class="chat_list active_chat">
                                 <div class="chat_people">
                                     <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png"
@@ -212,8 +212,49 @@
         </div>
     </div>
 
-    <script src="/socket.io/socket.io.js"></script>
+    <script src="strings.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
     <script>
+        var socket = io('http://localhost:3000');
+
+        socket.on('connect', function(response) {
+            console.log("CONNECTION_ESTABLISHED");
+        });
+
+        socket.on(ON_USERNAME_CHANGED, function (response) {
+            console.log("ON_USERNAME_CHANGED " + JSON.stringify(response));
+
+            updateUserList(response.userList);
+            updateGroupsChatRooms(response.roomList);
+        });
+
+        socket.on(ON_USER_CONNECTED, function (user) {
+            console.log("ON_USER_CONNECTED " + JSON.stringify(user));
+            
+            addUserList(user);
+        });
+
+        socket.on(ON_USER_DISCONNECTED, function (response) {
+            console.log("ON_USER_DISCONNECTED " + JSON.stringify(response));
+            console.log("disconnected user is " + JSON.stringify(response.leftUser));
+
+            updateUserList(response.userList);
+        });
+
+        socket.on(ON_GET_MESSAGE_FROM_GLOBAL, function (data) {
+            console.log("ON_GET_MESSAGE_FROM_GLOBAL " + JSON.stringify(data));
+        });
+
+        function sendName(name) {
+            console.log("Trying to set my name as: " + name);
+            socket.emit(SEND_USERNAME, name);
+        }
+
+        function sendGlobalMessage(data) {
+            console.log("Trying to send global message: " + data);
+            socket.emit(SEND_MESSAGE_TO_GLOBAL, data);
+        }
+
         function login() {
             var username = document.getElementById("loginUsername").value;
 
@@ -225,6 +266,8 @@
                 globalButton.click();
 
                 document.getElementById("tab").style.visibility = "visible";
+
+                sendName(username);
             } else {
                 alert("Kullanıcı adı boş bırakılamaz.");
             }
@@ -250,64 +293,75 @@
             document.getElementById(cityName).style.display = "block";
             evt.currentTarget.className += " active";
         }
+        
+        function addUserList(user) {
+            var html = "";
+            html += '<div class="chat_list">';
+                html += '<button type="button" onclick="return onUserSelected(user.name)" class="btn btn-primary">'
+                    html += '<div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>';
+                    html += '<div class="chat_ib"><p class="text-left" style="color:#fff">' + user.name  + '</p></div>';
+                    html += '</div>';
+                html += '</button>';
+            html += '</div>';
+                
+            /*<div class="chat_people">
+                <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png"
+                        alt="sunil"> </div>
+                <div class="chat_ib">
+                    <h5>Sunil Rajput</h5>
+                </div>
+            </div>*/
 
-        sendName("Ziyaretçi" + Math.floor(Math.random(Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER) * 100) + 1);
 
-        socket.on(ON_USER_CONNECTED, function (user) {
-            console.log("ON_USER_CONNECTED " + JSON.stringify(user));
-        });
-
-        socket.on(ON_USER_DISCONNECTED, function (user) {
-            console.log("ON_USER_DISCONNECTED " + JSON.stringify(user));
-        });
-
-        socket.on(ON_USERNAME_CHANGED, function (user) {
-            console.log("ON_USERNAME_CHANGED " + JSON.stringify(user));
-        });
-
-        socket.on(ON_JOIN_TO_ROOM_SUCCESS, function () {
-            console.log("ON_JOIN_TO_ROOM_SUCCESS");
-        });
-
-        socket.on(ON_JOIN_TO_ROOM_FAILED, function () {
-            console.log("ON_JOIN_TO_ROOM_FAILED");
-        });
-
-        socket.on(ON_LEAVE_FROM_ROOM_SUCCESS, function () {
-            console.log("ON_LEAVE_FROM_ROOM_SUCCESS");
-        });
-
-        socket.on(ON_LEAVE_FROM_ROOM_FAILED, function () {
-            console.log("ON_LEAVE_FROM_ROOM_FAILED");
-        });
-
-        socket.on(ON_GET_MESSAGE_FROM_GLOBAL, function (data) {
-            console.log("ON_GET_MESSAGE_FROM_GLOBAL " + JSON.stringify(data));
-        });
-
-        function sendName(name) {
-            console.log("Trying to set my name as: " + name);
-            socket.emit(SEND_USERNAME, name);
+            document.getElementById('globalChatUsers').innerHTML += html;
         }
 
-        function joinRoom(roomName) {
-            console.log("Trying to join to room called: " + roomName);
-            socket.emit(SEND_JOIN_TO_ROOM, roomName);
+        function updateUserList(userList) {
+            document.getElementById('globalChatUsers').innerHTML = "";
+
+            var singleUserHTML = "";
+            userList.forEach(user => {
+                var html = "";
+                html += '<div class="chat_list">';
+                    html += '<button type="button" onclick="return onUserSelected(user.name)" class="btn btn-primary">'
+                        html += '<div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>';
+                        html += '<div class="chat_ib"><p class="text-left" style="color:#fff">' + user.name  + '</p></div>';
+                        html += '</div>';
+                    html += '</button>';
+                html += '</div>';
+                
+                singleUserHTML += html;
+            });
+            
+            document.getElementById('globalChatUsers').innerHTML = singleUserHTML;
         }
 
-        function leaveRoom(roomName) {
-            console.log("Trying to leave from room called: " + roomName);
-            socket.emit(SEND_LEAVE_FROM_ROOM, roomName);
+        function updateGroupsChatRooms(roomList) {
+            document.getElementById('groupsChatRooms').innerHTML = "";
+
+            var singleRoomHTML = "";
+            roomList.forEach(room => {
+                var html = "";
+                html += '<div class="chat_list">';
+                    html += '<button type="button" onclick="return onRoomSelected(room.name)" class="btn btn-primary">'
+                        html += '<div class="chat_img"> <img src="' + room.imageThumbnail + '" + alt="sunil"> </div>';
+                        html += '<div class="chat_ib"><p class="text-left" style="color:#fff">' + room.name  + '</p></div>';
+                        html += '</div>';
+                    html += '</div>';
+                html += '</div>';
+                
+                singleRoomHTML += html;
+            });
+            
+            document.getElementById('groupsChatRooms').innerHTML = singleRoomHTML;
         }
 
-        function sendGlobalMessage(data) {
-            console.log("Trying to send global message: " + data);
-            socket.emit(SEND_MESSAGE_TO_GLOBAL, data);
+        function onUserSelected(username) {
+            
         }
 
-        function sendRoomMessage(roomName, data) {
-            console.log("Trying to send room message to " + roomName + "\ndata:" + data);
-            socket.emit(SEND_MESSAGE_TO_ROOM, roomName, data);
+        function onRoomSelected(roomName) {
+            
         }
 
     </script>

@@ -1,6 +1,7 @@
 function Room(name) {
     this.name = name;
     this.users = [];
+    this.imageThumbnail = "";
 
     this.addUser = function(user) {
         if (this.isUserIn(user.id)) {
