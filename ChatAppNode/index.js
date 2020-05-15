@@ -13,12 +13,6 @@ let roomManager = new RoomManager();
 let userManager = new UserManager();
 let logger = new Log("SERVER");
 
-app.use(express.static('public'));
-
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
-});
-
 io.on('connection', onConnect);
 
 function onConnect(socket) {

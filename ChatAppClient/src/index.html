@@ -5,204 +5,91 @@
 
 <html>
 
-    <head>
-        <link rel="stylesheet" href="style.css">
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css"
-            rel="stylesheet" />
-    </head>
+<head>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css"
+        rel="stylesheet" />
+</head>
 
-    <body>
-        <div class="container">
-            </br>
+<body>
+    <div class="container">
+        </br>
 
-            <!-- Tab links -->
-            <div id="tab" style="visibility: hidden;">
-                <div class="tab">
-                    <button id="globalButton" class="tablinks" onclick="openCity(event, 'Global')">Global</button>
-                    <button class="tablinks" onclick="openCity(event, 'Groups')">Gruplar</button>
-                    <button class="tablinks" onclick="openCity(event, 'PrivateMessage')">Özel Mesajlar</button>
-                </div>
+        <!-- Tab links -->
+        <div id="tab" style="visibility: hidden;">
+            <div class="tab">
+                <button id="globalButton" class="tablinks" onclick="openCity(event, 'Global')">Global</button>
+                <button class="tablinks" onclick="openCity(event, 'Groups')">Gruplar</button>
+                <button class="tablinks" onclick="openCity(event, 'PrivateMessage')">Özel Mesajlar</button>
             </div>
+        </div>
 
-            </br>
+        </br>
 
-            <div id="popover" data-toggle="popover" title="Popover title" data-content="And here's some amazing content. It's very engaging. Right?"></div>
+        <div id="popover" data-toggle="popover" title="Popover title"
+            data-content="And here's some amazing content. It's very engaging. Right?"></div>
 
-            <form id="loginScreen">
-                <div class="form-group">
-                    <label>Kullanıcı Adı</label>
-                    <input type="text" class="form-control" id="loginUsername" placeholder="Giriniz">
+        <form id="loginScreen">
+            <div class="form-group">
+                <label>Kullanıcı Adı</label>
+                <input type="text" class="form-control" id="loginUsername" placeholder="Giriniz">
                 </br>
-                    <button type="button" onclick="return login()" class="btn btn-primary btn-lg btn-block">Giriş Yap</button>
-                </div>
-            </form>
+                <button type="button" onclick="return login()" class="btn btn-primary btn-lg btn-block">Giriş
+                    Yap</button>
+            </div>
+        </form>
 
-            <!-- Tab content -->
-            <div id="Global" class="tabcontent">
-                <div class="messaging">
-                    <div class="inbox_msg">
-                        <div class="inbox_people">
-                            <div class="inbox_chat">
-                                <div class="chat_list active_chat">
-                                    <div class="chat_people">
-                                        <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png"
-                                                alt="sunil"> </div>
-                                        <div class="chat_ib">
-                                            <h5>Sunil Rajput</h5>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="chat_list">
-                                    <div class="chat_people">
-                                        <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png"
-                                                alt="sunil"> </div>
-                                        <div class="chat_ib">
-                                            <h5>Sunil Rajput</h5>
-                                        </div>
+        <!-- Tab content -->
+        <div id="Global" class="tabcontent">
+            <div class="messaging">
+                <div class="inbox_msg">
+                    <div class="inbox_people">
+                        <div class="inbox_chat">
+                            <div class="chat_list active_chat">
+                                <div class="chat_people">
+                                    <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png"
+                                            alt="sunil"> </div>
+                                    <div class="chat_ib">
+                                        <h5>Sunil Rajput</h5>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="mesgs">
-                            <div class="msg_history">
-                                <div class="outgoing_msg">
-                                    <div class="sent_msg">
-                                        <p>Apollo University, Delhi, India Test</p>
+
+                            <div class="chat_list">
+                                <div class="chat_people">
+                                    <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png"
+                                            alt="sunil"> </div>
+                                    <div class="chat_ib">
+                                        <h5>Sunil Rajput</h5>
                                     </div>
-                                </div>
-                                <div class="incoming_msg">
-                                    <div class="incoming_msg_img"> <img
-                                            src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-                                    <div class="received_msg">
-                                        <div class="received_withd_msg">
-                                            <p>We work directly with our designers and suppliers,
-                                                and sell direct to you, which means quality, exclusive
-                                                products, at a price anyone can afford.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="type_msg">
-                                <div class="input_msg_write">
-                                    <input type="text" class="write_msg" placeholder="Type a message" />
-                                    <button class="msg_send_btn" type="button"><i class="fa fa-paper-plane-o"
-                                            aria-hidden="true"></i></button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <div id="Groups" class="tabcontent">
-                <div class="messaging">
-                    <div class="inbox_msg">
-                        <div class="inbox_people">
-                            <div class="inbox_chat">
-                                <div class="chat_list active_chat">
-                                    <div class="chat_people">
-                                        <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png"
-                                                alt="sunil"> </div>
-                                        <div class="chat_ib">
-                                            <h5>Sunil Rajput</h5>
-                                        </div>
-                                    </div>
+                    <div class="mesgs">
+                        <div class="msg_history">
+                            <div class="outgoing_msg">
+                                <div class="sent_msg">
+                                    <p>Apollo University, Delhi, India Test</p>
                                 </div>
-
-                                <div class="chat_list">
-                                    <div class="chat_people">
-                                        <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png"
-                                                alt="sunil"> </div>
-                                        <div class="chat_ib">
-                                            <h5>Sunil Rajput</h5>
-                                        </div>
+                            </div>
+                            <div class="incoming_msg">
+                                <div class="incoming_msg_img"> <img
+                                        src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+                                <div class="received_msg">
+                                    <div class="received_withd_msg">
+                                        <p>We work directly with our designers and suppliers,
+                                            and sell direct to you, which means quality, exclusive
+                                            products, at a price anyone can afford.</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="mesgs">
-                            <div class="msg_history">
-                                <div class="outgoing_msg">
-                                    <div class="sent_msg">
-                                        <p>Apollo University, Delhi, India Test</p>
-                                    </div>
-                                </div>
-                                <div class="incoming_msg">
-                                    <div class="incoming_msg_img"> <img
-                                            src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-                                    <div class="received_msg">
-                                        <div class="received_withd_msg">
-                                            <p>We work directly with our designers and suppliers,
-                                                and sell direct to you, which means quality, exclusive
-                                                products, at a price anyone can afford.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="type_msg">
-                                <div class="input_msg_write">
-                                    <input type="text" class="write_msg" placeholder="Type a message" />
-                                    <button class="msg_send_btn" type="button"><i class="fa fa-paper-plane-o"
-                                            aria-hidden="true"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="PrivateMessage" class="tabcontent">
-                <div class="messaging">
-                    <div class="inbox_msg">
-                        <div class="inbox_people">
-                            <div class="inbox_chat">
-                                <div class="chat_list active_chat">
-                                    <div class="chat_people">
-                                        <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png"
-                                                alt="sunil"> </div>
-                                        <div class="chat_ib">
-                                            <h5>Sunil Rajput</h5>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="chat_list">
-                                    <div class="chat_people">
-                                        <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png"
-                                                alt="sunil"> </div>
-                                        <div class="chat_ib">
-                                            <h5>Sunil Rajput</h5>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mesgs">
-                            <div class="msg_history">
-                                <div class="outgoing_msg">
-                                    <div class="sent_msg">
-                                        <p>Apollo University, Delhi, India Test</p>
-                                    </div>
-                                </div>
-                                <div class="incoming_msg">
-                                    <div class="incoming_msg_img"> <img
-                                            src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-                                    <div class="received_msg">
-                                        <div class="received_withd_msg">
-                                            <p>We work directly with our designers and suppliers,
-                                                and sell direct to you, which means quality, exclusive
-                                                products, at a price anyone can afford.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="type_msg">
-                                <div class="input_msg_write">
-                                    <input type="text" class="write_msg" placeholder="Type a message" />
-                                    <button class="msg_send_btn" type="button"><i class="fa fa-paper-plane-o"
-                                            aria-hidden="true"></i></button>
-                                </div>
+                        <div class="type_msg">
+                            <div class="input_msg_write">
+                                <input type="text" class="write_msg" placeholder="Type a message" />
+                                <button class="msg_send_btn" type="button"><i class="fa fa-paper-plane-o"
+                                        aria-hidden="true"></i></button>
                             </div>
                         </div>
                     </div>
@@ -210,45 +97,220 @@
             </div>
         </div>
 
+        <div id="Groups" class="tabcontent">
+            <div class="messaging">
+                <div class="inbox_msg">
+                    <div class="inbox_people">
+                        <div class="inbox_chat">
+                            <div class="chat_list active_chat">
+                                <div class="chat_people">
+                                    <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png"
+                                            alt="sunil"> </div>
+                                    <div class="chat_ib">
+                                        <h5>Sunil Rajput</h5>
+                                    </div>
+                                </div>
+                            </div>
 
-        <script>
-            function login() {
-                var username = document.getElementById("loginUsername").value;
+                            <div class="chat_list">
+                                <div class="chat_people">
+                                    <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png"
+                                            alt="sunil"> </div>
+                                    <div class="chat_ib">
+                                        <h5>Sunil Rajput</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mesgs">
+                        <div class="msg_history">
+                            <div class="outgoing_msg">
+                                <div class="sent_msg">
+                                    <p>Apollo University, Delhi, India Test</p>
+                                </div>
+                            </div>
+                            <div class="incoming_msg">
+                                <div class="incoming_msg_img"> <img
+                                        src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+                                <div class="received_msg">
+                                    <div class="received_withd_msg">
+                                        <p>We work directly with our designers and suppliers,
+                                            and sell direct to you, which means quality, exclusive
+                                            products, at a price anyone can afford.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="type_msg">
+                            <div class="input_msg_write">
+                                <input type="text" class="write_msg" placeholder="Type a message" />
+                                <button class="msg_send_btn" type="button"><i class="fa fa-paper-plane-o"
+                                        aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                if (username.length > 0) {
-                    var loginScreen = document.getElementById("loginScreen");
-                    loginScreen.style.display = "none";
-        
-                    var globalButton = document.getElementById("globalButton");
-                    globalButton.click();
+        <div id="PrivateMessage" class="tabcontent">
+            <div class="messaging">
+                <div class="inbox_msg">
+                    <div class="inbox_people">
+                        <div class="inbox_chat">
+                            <div class="chat_list active_chat">
+                                <div class="chat_people">
+                                    <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png"
+                                            alt="sunil"> </div>
+                                    <div class="chat_ib">
+                                        <h5>Sunil Rajput</h5>
+                                    </div>
+                                </div>
+                            </div>
 
-                    document.getElementById("tab").style.visibility = "visible";
-                } else {
-                    alert("Kullanıcı adı boş bırakılamaz.");
-                }
+                            <div class="chat_list">
+                                <div class="chat_people">
+                                    <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png"
+                                            alt="sunil"> </div>
+                                    <div class="chat_ib">
+                                        <h5>Sunil Rajput</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mesgs">
+                        <div class="msg_history">
+                            <div class="outgoing_msg">
+                                <div class="sent_msg">
+                                    <p>Apollo University, Delhi, India Test</p>
+                                </div>
+                            </div>
+                            <div class="incoming_msg">
+                                <div class="incoming_msg_img"> <img
+                                        src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+                                <div class="received_msg">
+                                    <div class="received_withd_msg">
+                                        <p>We work directly with our designers and suppliers,
+                                            and sell direct to you, which means quality, exclusive
+                                            products, at a price anyone can afford.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="type_msg">
+                            <div class="input_msg_write">
+                                <input type="text" class="write_msg" placeholder="Type a message" />
+                                <button class="msg_send_btn" type="button"><i class="fa fa-paper-plane-o"
+                                        aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        function login() {
+            var username = document.getElementById("loginUsername").value;
+
+            if (username.length > 0) {
+                var loginScreen = document.getElementById("loginScreen");
+                loginScreen.style.display = "none";
+
+                var globalButton = document.getElementById("globalButton");
+                globalButton.click();
+
+                document.getElementById("tab").style.visibility = "visible";
+            } else {
+                alert("Kullanıcı adı boş bırakılamaz.");
+            }
+        }
+
+        function openCity(evt, cityName) {
+            // Declare all variables
+            var i, tabcontent, tablinks;
+
+            // Get all elements with class="tabcontent" and hide them
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
             }
 
-            function openCity(evt, cityName) {
-                // Declare all variables
-                var i, tabcontent, tablinks;
-
-                // Get all elements with class="tabcontent" and hide them
-                tabcontent = document.getElementsByClassName("tabcontent");
-                for (i = 0; i < tabcontent.length; i++) {
-                    tabcontent[i].style.display = "none";
-                }
-
-                // Get all elements with class="tablinks" and remove the class "active"
-                tablinks = document.getElementsByClassName("tablinks");
-                for (i = 0; i < tablinks.length; i++) {
-                    tablinks[i].className = tablinks[i].className.replace(" active", "");
-                }
-
-                // Show the current tab, and add an "active" class to the button that opened the tab
-                document.getElementById(cityName).style.display = "block";
-                evt.currentTarget.className += " active";
+            // Get all elements with class="tablinks" and remove the class "active"
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
             }
-        </script>
-    </body>
+
+            // Show the current tab, and add an "active" class to the button that opened the tab
+            document.getElementById(cityName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+        sendName("Ziyaretçi" + Math.floor(Math.random(Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER) * 100) + 1);
+
+        socket.on(ON_USER_CONNECTED, function (user) {
+            console.log("ON_USER_CONNECTED " + JSON.stringify(user));
+        });
+
+        socket.on(ON_USER_DISCONNECTED, function (user) {
+            console.log("ON_USER_DISCONNECTED " + JSON.stringify(user));
+        });
+
+        socket.on(ON_USERNAME_CHANGED, function (user) {
+            console.log("ON_USERNAME_CHANGED " + JSON.stringify(user));
+        });
+
+        socket.on(ON_JOIN_TO_ROOM_SUCCESS, function () {
+            console.log("ON_JOIN_TO_ROOM_SUCCESS");
+        });
+
+        socket.on(ON_JOIN_TO_ROOM_FAILED, function () {
+            console.log("ON_JOIN_TO_ROOM_FAILED");
+        });
+
+        socket.on(ON_LEAVE_FROM_ROOM_SUCCESS, function () {
+            console.log("ON_LEAVE_FROM_ROOM_SUCCESS");
+        });
+
+        socket.on(ON_LEAVE_FROM_ROOM_FAILED, function () {
+            console.log("ON_LEAVE_FROM_ROOM_FAILED");
+        });
+
+        socket.on(ON_GET_MESSAGE_FROM_GLOBAL, function (data) {
+            console.log("ON_GET_MESSAGE_FROM_GLOBAL " + JSON.stringify(data));
+        });
+
+        function sendName(name) {
+            console.log("Trying to set my name as: " + name);
+            socket.emit(SEND_USERNAME, name);
+        }
+
+        function joinRoom(roomName) {
+            console.log("Trying to join to room called: " + roomName);
+            socket.emit(SEND_JOIN_TO_ROOM, roomName);
+        }
+
+        function leaveRoom(roomName) {
+            console.log("Trying to leave from room called: " + roomName);
+            socket.emit(SEND_LEAVE_FROM_ROOM, roomName);
+        }
+
+        function sendGlobalMessage(data) {
+            console.log("Trying to send global message: " + data);
+            socket.emit(SEND_MESSAGE_TO_GLOBAL, data);
+        }
+
+        function sendRoomMessage(roomName, data) {
+            console.log("Trying to send room message to " + roomName + "\ndata:" + data);
+            socket.emit(SEND_MESSAGE_TO_ROOM, roomName, data);
+        }
+
+    </script>
+</body>
 
 </html>
