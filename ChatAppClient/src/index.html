@@ -225,6 +225,7 @@
     <script>
         var socket = io('http://localhost:3000');
         var myName = "";
+        var users = [];
 
         socket.on('connect', function(response) {
             console.log("CONNECTION_ESTABLISHED");
@@ -233,6 +234,8 @@
         socket.on(ON_USERNAME_CHANGED, function (response) {
             console.log("ON_USERNAME_CHANGED " + JSON.stringify(response));
 
+            users = response.userList;
+
             updateUserList(response.userList);
             updateGroupsChatRooms(response.roomList);
         });
@@ -240,12 +243,16 @@
         socket.on(ON_USER_CONNECTED, function (response) {
             console.log("ON_USER_CONNECTED " + JSON.stringify(response));
             
+            users = response.userList;
+            
             updateUserList(response.userList);
         });
 
         socket.on(ON_USER_DISCONNECTED, function (response) {
             console.log("ON_USER_DISCONNECTED " + JSON.stringify(response));
             console.log("disconnected user is " + JSON.stringify(response.leftUser));
+
+            users = response.userList;
 
             updateUserList(response.userList);
         });
@@ -272,6 +279,14 @@
         
         socket.on(ON_GET_MESSAGE_FROM_GLOBAL, function (data) {
             console.log("ON_GET_MESSAGE_FROM_GLOBAL " + JSON.stringify(data));
+        });
+
+        socket.on(ON_FETCH_USER_MESSAGES, function (data) {
+            console.log("ON_FETCH_USER_MESSAGES" + JSON.stringify(data));
+        });
+
+        socket.on(ON_FETCH_ROOM_MESSAGES, function (data) {
+            console.log("ON_FETCH_ROOM_MESSAGES" + JSON.stringify(data));
         });
 
         function sendName(name) {
@@ -318,6 +333,16 @@
         function sendJoinRoom(roomName) {
             console.log("Trying to join to room called: " + roomName);
             socket.emit(SEND_JOIN_TO_ROOM, roomName);
+        }
+
+        function sendFetchUserMessages(userid) {
+            console.log("Trying to fetch to user messages called " + userid);
+            socket.emit(SEND_FETCH_USER_MESSAGES, userid);
+        }
+        
+        function sendFetchRoomMessages(roomName) {
+            console.log("Trying to fetch to room messages called for room " + roomName);
+            socket.emit(SEND_FETCH_ROOM_MESSAGES, roomName);
         }
 
         function login() {
@@ -367,8 +392,8 @@
             userList.forEach(user => {
                 var html = "";
 
-                var usernameHTML = "'" + user.name + "'";
-                html += '<button type="button" onclick="return onUserSelected(' + usernameHTML + ')" class="chat_list btn btn-primary">';
+                var useridHTML = "'" + user.id + "'";
+                html += '<button type="button" onclick="return onUserSelected(' + useridHTML + ')" class="chat_list btn btn-primary">';
                     html += '<div class="chat_people">'
                         html += '<div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>';
                         html += '<div class="chat_ib"><p class="text-left" style="color:#fff">' + user.name  + '</p></div>';
@@ -419,12 +444,23 @@
             sendJoinRoom(roomName);
         }
 
-        function onUserSelected(username) {
-            console.log(username + " selected");
+        function onUserSelected(userid) {
+            console.log(userid + " selected");
+
+            var targetUser = users.find(user => user.id === userid);
+
+            if (targetUser === undefined) {
+                console.log("User not found : " + userid);
+                return;
+            }
+
+            sendFetchUserMessages(userid);
         }
 
         function onRoomSelected(roomName) {
             console.log(roomName + " selected");
+
+            sendFetchRoomMessages(roomName);
         }
 
     </script>

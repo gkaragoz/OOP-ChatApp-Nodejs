@@ -13,17 +13,6 @@ let roomManager = new RoomManager();
 let userManager = new UserManager();
 let logger = new Log("SERVER");
 
-roomManager.addRoom("Ağ Programlama");
-roomManager.getRoomByName("Ağ Programlama").imageThumbnail = 'https://www.creativefabrica.com/wp-content/uploads/2019/05/Network-icon-by-Muhazdinata-580x386.jpg';
-roomManager.addRoom("Javascript Odası");
-roomManager.getRoomByName("Javascript Odası").imageThumbnail = 'https://s3.us-east-2.amazonaws.com/upload-icon/uploads/icons/png/13691885491579517854-256.png';
-
-roomManager.addRoom("Python Odası");
-roomManager.getRoomByName("Python Odası").imageThumbnail = 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/1200px-Python-logo-notext.svg.png';
-
-roomManager.addRoom("Socket.io Odası");
-roomManager.getRoomByName("Socket.io Odası").imageThumbnail = 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Socket-io.svg/220px-Socket-io.svg.png';
-
 io.on('connection', onConnect);
 
 function onConnect(socket) {
@@ -107,6 +96,47 @@ function onConnect(socket) {
 
   socket.on(Keys.SEND_MESSAGE_TO_GLOBAL, (message) => {
     SendMessageToGlobal(socket, Keys.ON_GET_MESSAGE_FROM_GLOBAL, message);
+  });
+
+  socket.on(Keys.SEND_FETCH_USER_MESSAGES, (userid) => {
+    if (userManager.isUserExists(userid) === false) {
+      logger.print(userid + " id user not found - did this " + userManager.getUserById(socket.id));
+      return;
+    }
+
+    var pairedUserData = {
+      "messages": [
+        {
+          "id": "örnekid 1",
+          "senderName": "örnekGöndericiAdı 1",
+          "receiverName": "örnekAlıcıAdı 1",
+          "text": "bu bir mesaj içeriği 1",
+          "messageType": "örnekmesajTipii 1",
+          "dateTime": Date.now().toLocaleString(),
+        },
+        {
+          "id": "örnekid 2",
+          "senderName": "örnekGöndericiAdı 2",
+          "receiverName": "örnekAlıcıAdı 2",
+          "text": "bu bir mesaj içeriği 2",
+          "messageType": "örnekmesajTipii 2",
+          "dateTime": Date.now().toLocaleString(),
+        }
+      ]
+    }
+    socket.emit(Keys.ON_FETCH_USER_MESSAGES, pairedUserData);
+  });
+
+  socket.on(Keys.SEND_FETCH_ROOM_MESSAGES, (roomName) => {
+    if (roomManager.isRoomExists(roomName) === false) {
+      logger.print(roomName + " named room not found - did this " + userManager.getUserById(socket.id));
+      return;
+    }
+
+    var roomData = {
+      "room": roomManager.getRoomByName(roomName)
+    }
+    socket.emit(Keys.ON_FETCH_ROOM_MESSAGES, roomData);
   });
 }
 
