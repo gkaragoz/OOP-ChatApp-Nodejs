@@ -64,9 +64,15 @@ function onConnect(socket) {
     user = userManager.getUserById(socket.id);
     logger.print(user.name + " named user wants to join room called " + roomName);
 
+    var response = {};
+
     roomManager.addUser(socket, user, roomName, (isSuccess) => {
       if (isSuccess) {
-        BroadcastToEveryoneIncludeMe(socket, Keys.ON_JOIN_TO_ROOM_SUCCESS);
+        response = {
+          "roomList": roomManager.rooms
+        }
+
+        BroadcastToEveryoneIncludeMe(socket, Keys.ON_JOIN_TO_ROOM_SUCCESS, response);
       } else {
         BroadcastToEveryoneIncludeMe(socket, Keys.ON_JOIN_TO_ROOM_FAILED);
       }

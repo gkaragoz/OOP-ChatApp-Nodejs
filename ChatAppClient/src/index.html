@@ -152,6 +152,15 @@
                     </div>
                 </div>
             </div>
+            
+            <form>
+                <div class="form-group">
+                    <label>Grup Oluştur</label>
+                    <input type="text" class="form-control" id="roomName" placeholder="Grup Adı">
+                    </br>
+                    <button type="button" onclick="return createOrJoinRoom()" class="btn btn-primary">Oluştur</button>
+                </div>
+            </form>
         </div>
 
         <div id="PrivateMessage" class="tabcontent">
@@ -241,6 +250,18 @@
             updateUserList(response.userList);
         });
 
+        socket.on(ON_JOIN_TO_ROOM_SUCCESS, function(response) {
+            console.log("ON_JOIN_TO_ROOM_SUCCESS " + JSON.stringify(response));
+
+            updateGroupsChatRooms(response.roomList);
+        });
+        
+        socket.on(ON_JOIN_TO_ROOM_FAILED, function(response) {
+            console.log("ON_JOIN_TO_ROOM_FAILED " + JSON.stringify(response));
+
+            alert("Böyle bir oda zaten mevcut.");
+        });
+
         socket.on(ON_GET_MESSAGE_FROM_GLOBAL, function (data) {
             console.log("ON_GET_MESSAGE_FROM_GLOBAL " + JSON.stringify(data));
         });
@@ -253,6 +274,11 @@
         function sendGlobalMessage(data) {
             console.log("Trying to send global message: " + data);
             socket.emit(SEND_MESSAGE_TO_GLOBAL, data);
+        }
+
+        function sendJoinRoom(roomName) {
+            console.log("Trying to join to room called: " + roomName);
+            socket.emit(SEND_JOIN_TO_ROOM, roomName);
         }
 
         function login() {
@@ -304,15 +330,6 @@
                 html += '</button>';
             html += '</div>';
                 
-            /*<div class="chat_people">
-                <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png"
-                        alt="sunil"> </div>
-                <div class="chat_ib">
-                    <h5>Sunil Rajput</h5>
-                </div>
-            </div>*/
-
-
             document.getElementById('globalChatUsers').innerHTML += html;
         }
 
@@ -336,6 +353,19 @@
             document.getElementById('globalChatUsers').innerHTML = singleUserHTML;
         }
 
+        function addGroupsChatRooms(room) {
+            var html = "";
+            html += '<div class="chat_list">';
+                html += '<button type="button" onclick="return onRoomSelected(room.name)" class="btn btn-primary">'
+                    html += '<div class="chat_img"> <img src="' + room.imageThumbnail + '"> </div>';
+                    html += '<div class="chat_ib"><p class="text-left" style="color:#fff">' + room.name  + '</p></div>';
+                    html += '</div>';
+                html += '</div>';
+            html += '</div>';
+                
+            document.getElementById('groupsChatRooms').innerHTML += html;
+        }
+
         function updateGroupsChatRooms(roomList) {
             document.getElementById('groupsChatRooms').innerHTML = "";
 
@@ -344,7 +374,7 @@
                 var html = "";
                 html += '<div class="chat_list">';
                     html += '<button type="button" onclick="return onRoomSelected(room.name)" class="btn btn-primary">'
-                        html += '<div class="chat_img"> <img src="' + room.imageThumbnail + '" + alt="sunil"> </div>';
+                        html += '<div class="chat_img"> <img src="' + room.imageThumbnail + '"> </div>';
                         html += '<div class="chat_ib"><p class="text-left" style="color:#fff">' + room.name  + '</p></div>';
                         html += '</div>';
                     html += '</div>';
@@ -354,6 +384,12 @@
             });
             
             document.getElementById('groupsChatRooms').innerHTML = singleRoomHTML;
+        }
+
+        function createOrJoinRoom() {
+            var roomName = document.getElementById('roomName').value;
+
+            sendJoinRoom(roomName);
         }
 
         function onUserSelected(username) {

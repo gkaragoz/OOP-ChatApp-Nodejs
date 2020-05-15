@@ -12,6 +12,7 @@ function RoomManager() {
             logger.print(roomName + " named room not found");
 
             targetRoom = this.addRoom(roomName);
+            targetRoom.imageThumbnail = 'https://www.seekpng.com/png/detail/43-432878_select-template-instagram-story-circle-png.png';
 
             logger.print(roomName + " named room is created succesfully");
         } else {
