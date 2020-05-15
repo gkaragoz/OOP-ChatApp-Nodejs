@@ -7,27 +7,28 @@ function UserManager() {
     this.users = [];
 
     this.addMessage = function(message) {
-        if (this.isUserExists(message.senderName) == false) {
+        var sender = this.getUserByName(message.senderName);
+
+        if (sender == undefined) {
             logger.print(message.senderName + " named sender user not found.");
             return;
         }
 
-        var sender = this.getUserById(message.senderName);
         sender.addMessage(message);
     }
 
     this.addMessageBoth = function(message) {
-        if (this.isUserExists(message.senderName) == false) {
+        var sender = this.getUserByName(message.senderName);
+        var receiver = this.getUserByName(message.receiverName);
+
+        if (sender == undefined) {
             logger.print(message.senderName + " named sender user not found.");
             return;
         }
-        if (this.isUserExists(message.receiverName) == false) {
+        if (receiver == undefined) {
             logger.print(message.receiverName + " named receiver user not found.");
             return;
         }
-
-        var sender = this.getUserById(message.senderName);
-        var receiver = this.getUserById(message.receiverName);
 
         sender.addMessage(message);
         receiver.addMessage(message);
@@ -74,6 +75,10 @@ function UserManager() {
 
     this.getUserById = function (id) {
         return this.users.find(user => user.id === id);
+    }
+
+    this.getUserByName = function(name) {
+        return this.users.find(user => user.name === name);
     }
 
     this.getPrettyUserPrint = function (user) {

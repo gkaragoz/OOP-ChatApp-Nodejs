@@ -132,6 +132,11 @@ function SendMessageToRoom(socket, EVENT_CODE, message) {
   
   message.messageType = "Room";
 
+  if (roomManager.isRoomExists(message.receiverName) === false) {
+    logger.print(message.receiverName + " named target room not found - " + message.senderName + " did this.");
+    return;
+  }
+  
   var targetRoom = roomManager.getRoomByName(message.receiverName);
   targetRoom.users.forEach(user => {
     user.addMessage(message);
@@ -142,14 +147,21 @@ function SendMessageToRoom(socket, EVENT_CODE, message) {
 }
 
 function SendMessageToPrivate(io, senderSocket, EVENT_CODE, message) {
-  logger.print(EVENT_CODE + " sent private message from " + message.senderName + " to" + message.receiverName);
+  logger.print(EVENT_CODE + " sent private message from " + message.senderName + " to " + message.receiverName);
   
   message.messageType = "Private";
-  
+
+  if (userManager.getUserByName(message.receiverName) === undefined) {
+    logger.print(message.receiverName + " named receiver user not found - " + message.senderName + " did this.");
+    return;
+  }
+
   userManager.addMessageBoth(message);
 
+  var receiverUser = userManager.getUserByName(message.receiverName);
+
   senderSocket.emit(EVENT_CODE, message);
-  io.to(message.receiverName).emit(EVENT_CODE, message);
+  io.to(receiverUser.id).emit(EVENT_CODE, message);
 }
 
 function SendMessageToGlobal(senderSocket, EVENT_CODE, message) {
