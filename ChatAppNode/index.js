@@ -97,38 +97,16 @@ function onConnect(socket) {
     });
   });
 
-  socket.on(Keys.SEND_MESSAGE_TO_ROOM, (targetRoomName, data) => {
-    user = userManager.getUserById(socket.id);
-    room = roomManager.getRoomByName(targetRoomName);
-
-    let response = {
-      "sender": user,
-      "data": data
-    };
-
-    SendMessageToGroup(socket, targetRoomName, Keys.ON_GET_MESSAGE_FROM_ROOM, response);
+  socket.on(Keys.SEND_MESSAGE_TO_ROOM, (message) => {
+    SendMessageToRoom(socket, Keys.ON_GET_MESSAGE_FROM_ROOM, message);
   });
 
-  socket.on(Keys.SEND_MESSAGE_TO_PRIVATE, (socketId, data) => {
-    user = userManager.getUserById(socketId);
-    
-    let response = {
-      "sender": user,
-      "data": data
-    };
-
-    SendMessageToPrivate(io, socket, Keys.ON_GET_MESSAGE_FROM_PRIVATE, response);
+  socket.on(Keys.SEND_MESSAGE_TO_PRIVATE, (message) => {
+    SendMessageToPrivate(io, socket, Keys.ON_GET_MESSAGE_FROM_PRIVATE, message);
   });
 
-  socket.on(Keys.SEND_MESSAGE_TO_GLOBAL, (data) => {
-    user = userManager.getUserById(socket.id);
-
-    let response = {
-      "sender": user,
-      "data": data
-    };
-
-    BroadcastToEveryoneIncludeMe(socket, Keys.ON_GET_MESSAGE_FROM_GLOBAL, response);
+  socket.on(Keys.SEND_MESSAGE_TO_GLOBAL, (message) => {
+    SendMessageToGlobal(socket, Keys.ON_GET_MESSAGE_FROM_GLOBAL, message);
   });
 }
 
@@ -149,14 +127,41 @@ function BroadcastToEveryoneIncludeMe(socket, EVENT_CODE, data) {
   socket.broadcast.emit(EVENT_CODE, data);
 }
 
-function SendMessageToGroup(socket, groupName, EVENT_CODE, data) {
-  logger.print(EVENT_CODE + " broadcasted to group except sender " + userManager.getUserById(socket.id).name);
-  socket.to(groupName).emit(EVENT_CODE, data);
+function SendMessageToRoom(socket, EVENT_CODE, message) {
+  logger.print(EVENT_CODE + " broadcasted to group from " + message.senderName + " to " + message.receiverName + " room");
+  
+  message.messageType = "Room";
+
+  var targetRoom = roomManager.getRoomByName(message.receiverName);
+  targetRoom.users.forEach(user => {
+    user.addMessage(message);
+  });
+
+  socket.emit(EVENT_CODE, message);
+  socket.to(targetRoom.name).emit(EVENT_CODE, message);
 }
 
-function SendMessageToPrivate(io, socket, EVENT_CODE, data) {
-  logger.print(EVENT_CODE + " sent private message to " + userManager.getUserById(socket.id).name);
-  io.to(socket.id).emit(EVENT_CODE, data);
+function SendMessageToPrivate(io, senderSocket, EVENT_CODE, message) {
+  logger.print(EVENT_CODE + " sent private message from " + message.senderName + " to" + message.receiverName);
+  
+  message.messageType = "Private";
+  
+  userManager.addMessageBoth(message);
+
+  senderSocket.emit(EVENT_CODE, message);
+  io.to(message.receiverName).emit(EVENT_CODE, message);
+}
+
+function SendMessageToGlobal(senderSocket, EVENT_CODE, message) {
+  logger.print(EVENT_CODE + " sent global message from " + message.senderName + " to everyone");
+
+  message.messageType = "Global";
+
+  userManager.users.forEach(user => {
+    user.addMessage(message);
+  });
+
+  BroadcastToEveryoneIncludeMe(senderSocket, EVENT_CODE, message);
 }
 
 http.listen(3000, () => {

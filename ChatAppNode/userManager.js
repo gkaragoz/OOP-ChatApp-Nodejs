@@ -6,6 +6,33 @@ let logger = new Log("UserManager");
 function UserManager() {
     this.users = [];
 
+    this.addMessage = function(message) {
+        if (this.isUserExists(message.senderName) == false) {
+            logger.print(message.senderName + " named sender user not found.");
+            return;
+        }
+
+        var sender = this.getUserById(message.senderName);
+        sender.addMessage(message);
+    }
+
+    this.addMessageBoth = function(message) {
+        if (this.isUserExists(message.senderName) == false) {
+            logger.print(message.senderName + " named sender user not found.");
+            return;
+        }
+        if (this.isUserExists(message.receiverName) == false) {
+            logger.print(message.receiverName + " named receiver user not found.");
+            return;
+        }
+
+        var sender = this.getUserById(message.senderName);
+        var receiver = this.getUserById(message.receiverName);
+
+        sender.addMessage(message);
+        receiver.addMessage(message);
+    }
+
     this.addUser = function (id, name, rooms) {
         if (this.isUserExists(id)) {
             logger.print(name + " named user already exists in list.");

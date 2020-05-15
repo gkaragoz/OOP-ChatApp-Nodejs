@@ -98,6 +98,14 @@
         </div>
 
         <div id="Groups" class="tabcontent">
+            <form>
+                <div class="form-group">
+                    <label>Grup Oluştur</label>
+                    <input type="text" class="form-control" id="roomName" placeholder="Grup Adı">
+                    </br>
+                    <button type="button" onclick="return createOrJoinRoom()" class="btn btn-primary">Oluştur</button>
+                </div>
+            </form>
             <div class="messaging">
                 <div class="inbox_msg">
                     <div class="inbox_people">
@@ -152,15 +160,6 @@
                     </div>
                 </div>
             </div>
-            
-            <form>
-                <div class="form-group">
-                    <label>Grup Oluştur</label>
-                    <input type="text" class="form-control" id="roomName" placeholder="Grup Adı">
-                    </br>
-                    <button type="button" onclick="return createOrJoinRoom()" class="btn btn-primary">Oluştur</button>
-                </div>
-            </form>
         </div>
 
         <div id="PrivateMessage" class="tabcontent">
@@ -225,6 +224,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
     <script>
         var socket = io('http://localhost:3000');
+        var myName = "";
 
         socket.on('connect', function(response) {
             console.log("CONNECTION_ESTABLISHED");
@@ -262,6 +262,14 @@
             alert("Böyle bir oda zaten mevcut.");
         });
 
+        socket.on(ON_GET_MESSAGE_FROM_ROOM, function (data) {
+            console.log("ON_GET_MESSAGE_FROM_ROOM " + JSON.stringify(data));
+        });
+        
+        socket.on(ON_GET_MESSAGE_FROM_PRIVATE, function (data) {
+            console.log("ON_GET_MESSAGE_FROM_PRIVATE " + JSON.stringify(data));
+        });
+        
         socket.on(ON_GET_MESSAGE_FROM_GLOBAL, function (data) {
             console.log("ON_GET_MESSAGE_FROM_GLOBAL " + JSON.stringify(data));
         });
@@ -270,10 +278,41 @@
             console.log("Trying to set my name as: " + name);
             socket.emit(SEND_USERNAME, name);
         }
+        
+        function sendRoomMessage(roomName) {
+            var message = {
+                "senderName": myName,
+                "receiverName": roomName,
+                "text": "BU BİR MESAJ İÇERİĞİDİR"
+            };
+            
+            console.log("Trying to send room message from " + message.senderName + " to " + message.receiverName);
 
-        function sendGlobalMessage(data) {
-            console.log("Trying to send global message: " + data);
-            socket.emit(SEND_MESSAGE_TO_GLOBAL, data);
+            socket.emit(SEND_MESSAGE_TO_ROOM, message);
+        }
+
+        function sendPrivateMessage(receiverName) {
+            var message = {
+                "senderName": myName,
+                "receiverName": receiverName,
+                "text": "BU BİR MESAJ İÇERİĞİDİR"
+            };
+            
+            console.log("Trying to send private message from " + message.senderName + " to " + message.receiverName);
+
+            socket.emit(SEND_MESSAGE_TO_PRIVATE, message);
+        }
+
+        function sendGlobalMessage() {
+            var message = {
+                "senderName": myName,
+                "receiverName": "testAlıcıKişisi",
+                "text": "BU BİR MESAJ İÇERİĞİDİR"
+            };
+            
+            console.log("Trying to send global message from " + message.senderName + " to " + message.receiverName);
+
+            socket.emit(SEND_MESSAGE_TO_GLOBAL, message);
         }
 
         function sendJoinRoom(roomName) {
@@ -283,6 +322,7 @@
 
         function login() {
             var username = document.getElementById("loginUsername").value;
+            myName = username;
 
             if (username.length > 0) {
                 var loginScreen = document.getElementById("loginScreen");
@@ -326,7 +366,9 @@
             var singleUserHTML = "";
             userList.forEach(user => {
                 var html = "";
-                html += '<button type="button" onclick="return onUserSelected(' + user.name + ')" class="chat_list btn btn-primary">';
+
+                var usernameHTML = "'" + user.name + "'";
+                html += '<button type="button" onclick="return onUserSelected(' + usernameHTML + ')" class="chat_list btn btn-primary">';
                     html += '<div class="chat_people">'
                         html += '<div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>';
                         html += '<div class="chat_ib"><p class="text-left" style="color:#fff">' + user.name  + '</p></div>';
@@ -341,7 +383,8 @@
 
         function addGroupsChatRooms(room) {
             var html = "";
-            html += '<button type="button" onclick="return onRoomSelected(' + room.name + ')" class="chat_list btn btn-primary">';
+            var roomNameHTML = "'" + room.name + "'";
+            html += '<button type="button" onclick="return onRoomSelected(' + roomNameHTML + ')" class="chat_list btn btn-primary">';
                 html += '<div class="chat_people">'
                     html += '<div class="chat_img"> <img src="' + room.imageThumbnail + '"> </div>';
                     html += '<div class="chat_ib"><p class="text-left" style="color:#fff">' + room.name  + '</p></div>';
@@ -357,7 +400,8 @@
             var singleRoomHTML = "";
             roomList.forEach(room => {
                 var html = "";
-                html += '<button type="button" onclick="return onRoomSelected(' + room.name + ')" class="chat_list btn btn-primary">';
+                var roomNameHTML = "'" + room.name + "'";
+                html += '<button type="button" onclick="return onRoomSelected(' + roomNameHTML + ')" class="chat_list btn btn-primary">';
                     html += '<div class="chat_people">'
                         html += '<div class="chat_img"> <img src="' + room.imageThumbnail + '"> </div>';
                         html += '<div class="chat_ib"><p class="text-left" style="color:#fff">' + room.name  + '</p></div>';
@@ -376,11 +420,11 @@
         }
 
         function onUserSelected(username) {
-            
+            console.log(username + " selected");
         }
 
         function onRoomSelected(roomName) {
-            
+            console.log(roomName + " selected");
         }
 
     </script>
