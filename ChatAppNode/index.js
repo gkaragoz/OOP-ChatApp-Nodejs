@@ -31,7 +31,12 @@ function onConnect(socket) {
 
   logger.print(JSON.stringify(user.name) + ' named connected to server.');
 
-  BroadcastToEveryoneExceptMe(socket, Keys.ON_USER_CONNECTED, user);
+  var response = {
+    "userList": userManager.users,
+    "roomList": roomManager.rooms
+  }
+
+  BroadcastToEveryoneExceptMe(socket, Keys.ON_USER_CONNECTED, response);
 
   socket.on('disconnect', () => {
     user = userManager.removeUser(socket.id);

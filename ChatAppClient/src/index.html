@@ -237,10 +237,10 @@
             updateGroupsChatRooms(response.roomList);
         });
 
-        socket.on(ON_USER_CONNECTED, function (user) {
-            console.log("ON_USER_CONNECTED " + JSON.stringify(user));
+        socket.on(ON_USER_CONNECTED, function (response) {
+            console.log("ON_USER_CONNECTED " + JSON.stringify(response));
             
-            addUserList(user);
+            updateUserList(response.userList);
         });
 
         socket.on(ON_USER_DISCONNECTED, function (response) {
@@ -320,32 +320,18 @@
             evt.currentTarget.className += " active";
         }
         
-        function addUserList(user) {
-            var html = "";
-            html += '<div class="chat_list">';
-                html += '<button type="button" onclick="return onUserSelected(user.name)" class="btn btn-primary">'
-                    html += '<div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>';
-                    html += '<div class="chat_ib"><p class="text-left" style="color:#fff">' + user.name  + '</p></div>';
-                    html += '</div>';
-                html += '</button>';
-            html += '</div>';
-                
-            document.getElementById('globalChatUsers').innerHTML += html;
-        }
-
         function updateUserList(userList) {
             document.getElementById('globalChatUsers').innerHTML = "";
 
             var singleUserHTML = "";
             userList.forEach(user => {
                 var html = "";
-                html += '<div class="chat_list">';
-                    html += '<button type="button" onclick="return onUserSelected(user.name)" class="btn btn-primary">'
+                html += '<button type="button" onclick="return onUserSelected(' + user.name + ')" class="chat_list btn btn-primary">';
+                    html += '<div class="chat_people">'
                         html += '<div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>';
                         html += '<div class="chat_ib"><p class="text-left" style="color:#fff">' + user.name  + '</p></div>';
-                        html += '</div>';
-                    html += '</button>';
-                html += '</div>';
+                    html += '</div>';
+                html += '</button>';
                 
                 singleUserHTML += html;
             });
@@ -355,13 +341,12 @@
 
         function addGroupsChatRooms(room) {
             var html = "";
-            html += '<div class="chat_list">';
-                html += '<button type="button" onclick="return onRoomSelected(room.name)" class="btn btn-primary">'
+            html += '<button type="button" onclick="return onRoomSelected(' + room.name + ')" class="chat_list btn btn-primary">';
+                html += '<div class="chat_people">'
                     html += '<div class="chat_img"> <img src="' + room.imageThumbnail + '"> </div>';
                     html += '<div class="chat_ib"><p class="text-left" style="color:#fff">' + room.name  + '</p></div>';
-                    html += '</div>';
                 html += '</div>';
-            html += '</div>';
+            html += '</button>';
                 
             document.getElementById('groupsChatRooms').innerHTML += html;
         }
@@ -372,14 +357,12 @@
             var singleRoomHTML = "";
             roomList.forEach(room => {
                 var html = "";
-                html += '<div class="chat_list">';
-                    html += '<button type="button" onclick="return onRoomSelected(room.name)" class="btn btn-primary">'
+                html += '<button type="button" onclick="return onRoomSelected(' + room.name + ')" class="chat_list btn btn-primary">';
+                    html += '<div class="chat_people">'
                         html += '<div class="chat_img"> <img src="' + room.imageThumbnail + '"> </div>';
                         html += '<div class="chat_ib"><p class="text-left" style="color:#fff">' + room.name  + '</p></div>';
-                        html += '</div>';
                     html += '</div>';
-                html += '</div>';
-                
+                html += '</button>';
                 singleRoomHTML += html;
             });
             
